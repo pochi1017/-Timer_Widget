@@ -14,109 +14,118 @@
     align-items: center;
     justify-content: center;
     min-height: 100vh;
-    background: transparent;
+    background: #F9F9FB;
     font-family: 'Inter', sans-serif;
   }
 
   .wrap {
     text-align: center;
-    padding: 24px 20px;
-    max-width: 480px;
+    padding: 40px 32px;
+    max-width: 1080px;
     width: 100%;
   }
 
-  /* 1단: 메인 카피 */
   .headline {
-    font-size: clamp(16px, 4vw, 20px);
+    font-size: 32px;
     font-weight: 700;
     color: #1A1A1A;
-    line-height: 1.5;
-    margin-bottom: 10px;
+    line-height: 1.4;
+    margin-bottom: 16px;
   }
 
-  /* 2단: 경고 문구 */
   .warning {
     display: inline-block;
-    font-size: clamp(11px, 2.8vw, 14px);
-    font-weight: 600;
+    font-size: 20px;
+    font-weight: 700;
     color: #fff;
     background: #E53030;
-    padding: 4px 14px;
-    border-radius: 4px;
-    margin-bottom: 20px;
+    padding: 8px 24px;
+    border-radius: 6px;
+    margin-bottom: 32px;
   }
 
-  /* 3단: 라벨 */
   .label {
-    font-size: clamp(10px, 2.5vw, 12px);
+    font-size: 16px;
     font-weight: 500;
     color: #999;
-    letter-spacing: 2px;
-    margin-bottom: 10px;
+    letter-spacing: 3px;
+    margin-bottom: 16px;
   }
 
-  /* 4단: 카운트다운 */
   .timer {
     display: flex;
     align-items: flex-start;
     justify-content: center;
-    gap: clamp(4px, 1.5vw, 10px);
+    gap: 16px;
   }
 
   .unit {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 4px;
+    gap: 8px;
   }
 
   .num {
-    font-size: clamp(28px, 8vw, 40px);
+    font-size: 72px;
     font-weight: 800;
     color: #E00;
     line-height: 1;
     font-variant-numeric: tabular-nums;
-    min-width: clamp(40px, 10vw, 60px);
+    min-width: 100px;
     text-align: center;
   }
 
   .unit-label {
-    font-size: clamp(9px, 2vw, 11px);
+    font-size: 14px;
     font-weight: 600;
     color: #C44;
-    letter-spacing: 1px;
+    letter-spacing: 2px;
   }
 
   .sep {
-    font-size: clamp(20px, 5vw, 30px);
+    font-size: 52px;
     font-weight: 700;
     color: #E00;
     opacity: 0.4;
-    padding-top: clamp(2px, 0.5vw, 6px);
+    padding-top: 6px;
   }
 
   .ms {
-    font-size: clamp(16px, 4vw, 22px);
+    font-size: 36px;
     font-weight: 700;
     color: #E00;
     opacity: 0.6;
-    padding-top: clamp(6px, 1.5vw, 12px);
-    min-width: clamp(24px, 6vw, 36px);
+    padding-top: 20px;
+    min-width: 56px;
     font-variant-numeric: tabular-nums;
   }
 
-  /* 종료 */
   .ended {
-    font-size: clamp(18px, 5vw, 28px);
+    font-size: 48px;
     font-weight: 800;
     color: #E00;
-    padding: 20px 0;
+    padding: 24px 0;
     animation: pulse 1.2s ease-in-out infinite;
   }
 
   @keyframes pulse {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.5; }
+  }
+
+  /* 모바일 대응 */
+  @media (max-width: 600px) {
+    .wrap { padding: 24px 16px; }
+    .headline { font-size: 20px; }
+    .warning { font-size: 14px; padding: 6px 16px; }
+    .label { font-size: 12px; }
+    .num { font-size: 40px; min-width: 52px; }
+    .sep { font-size: 28px; }
+    .ms { font-size: 22px; padding-top: 10px; }
+    .unit-label { font-size: 10px; }
+    .timer { gap: 8px; }
+    .ended { font-size: 28px; }
   }
 </style>
 </head>
@@ -162,10 +171,14 @@
 
   function pad(n) { return n.toString().padStart(2, '0'); }
 
+  let ended = false;
+
   function tick() {
+    if (ended) return;
     const diff = TARGET - Date.now();
 
     if (diff <= 0) {
+      ended = true;
       document.getElementById('timer').style.display = 'none';
       document.querySelector('.label').style.display = 'none';
       const el = document.createElement('div');
